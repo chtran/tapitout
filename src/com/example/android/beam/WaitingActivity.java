@@ -20,7 +20,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.AnimationDrawable;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
@@ -33,6 +32,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.Parcelable;
 import android.text.format.Time;
+import android.view.View;
 import android.widget.Toast;
 
 public class WaitingActivity extends Activity implements CreateNdefMessageCallback, OnNdefPushCompleteCallback {
@@ -49,11 +49,11 @@ public class WaitingActivity extends Activity implements CreateNdefMessageCallba
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.waiting);
 		
-		ImageView tapitImage = (ImageView) findViewById(R.id.selected);
-		tapitImage.setBackgroundResource(R.drawable.tap_animation);
-		
-		AnimationDrawable tapitAnimation = (AnimationDrawable) tapitImage.getBackground();
-		tapitAnimation.start();
+//		ImageView tapitImage = (ImageView) findViewById(R.id.selected);
+//		tapitImage.setBackgroundResource(R.drawable.tap_animation);
+//		
+//		AnimationDrawable tapitAnimation = (AnimationDrawable) tapitImage.getBackground();
+//		tapitAnimation.start();
 		
 		Intent intent = getIntent();
 		transactionId = intent.getIntExtra("transactionId", 0);
@@ -189,7 +189,7 @@ public class WaitingActivity extends Activity implements CreateNdefMessageCallba
 							}
 							else
 							{
-								System.out.println("still waiting");
+								System.out.println("still waiting 1");
 							}
 							System.out.println("testing after waiting");
 							Looper.loop();
@@ -235,10 +235,10 @@ public class WaitingActivity extends Activity implements CreateNdefMessageCallba
 				{
 					Toast.makeText(getApplicationContext(), transactionDetails.second() + " is sending you $" + nf.format(transactionDetails.first() / 100.0) + "...", Toast.LENGTH_LONG).show();
 
-					Thread t2 = new Thread() {
-						public void run() {
+					// Thread t2 = new Thread() {
+					// 	public void run() {
 
-							Looper.prepare();
+					// 		Looper.prepare();
 							while(true)
 							{
 								Integer transactionStatus = checkTransactionStatus();
@@ -284,11 +284,14 @@ public class WaitingActivity extends Activity implements CreateNdefMessageCallba
 								{
 									System.out.println("still waiting");
 								}
+								//View vg = findViewById(R.id.waiting);
+								//vg.invalidate();
+								
 								Looper.loop();
 							}
-						}
-					};
-					t2.start();
+					// 	}
+					// };
+					// t2.start();
 				}
 				else
 				{
