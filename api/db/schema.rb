@@ -11,7 +11,13 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130112060329) do
+ActiveRecord::Schema.define(:version => 20130112072221) do
+
+  create_table "groups", :force => true do |t|
+    t.integer  "owner_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "transactions", :force => true do |t|
     t.integer  "receiver_id"
@@ -38,6 +44,7 @@ ActiveRecord::Schema.define(:version => 20130112060329) do
     t.string   "authentication_token"
     t.string   "name"
     t.integer  "balance",                :default => 1000
+    t.integer  "group_id"
   end
 
   add_index "users", ["authentication_token"], :name => "index_users_on_authentication_token", :unique => true
