@@ -7,21 +7,21 @@
     android:orientation="vertical" >
 
     <Button 
-        android:layout_width="wrap_content"
+        style="@style/buttonLongStyle"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:text="@string/button_transaction" 
         android:onClick="startTransaction" />
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+		style="@style/buttonLongStyle"
+		android:layout_height="wrap_content"
         android:layout_marginBottom="50dp"
         android:text="@string/button_addcard"
         android:onClick="startAddCard" />
     
     <Button 
-        android:layout_width="wrap_content"
+		style="@style/buttonLongStyle"
         android:layout_height="wrap_content"
         android:text="@string/button_quit"
         android:onClick="quit" />

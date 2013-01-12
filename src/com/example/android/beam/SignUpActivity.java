@@ -91,12 +91,13 @@ public class SignUpActivity extends Activity {
 			response = client.execute(post, responseHandler);
 			
 			JSONObject jObject = new JSONObject(response);
-			
+			JSONObject sessionObject = jObject.getJSONObject("user");
 			SharedPreferences.Editor editor = mPreferences.edit();
-			editor.putString("auth_token", jObject.getString("authentication_token"));
-			editor.putString("email", jObject.getString("email"));
-			editor.putString("name", jObject.getString("name"));
-			editor.putInt("balance", jObject.getInt("balance"));
+			editor.putString("auth_token", sessionObject.getString("authentication_token"));
+			editor.putString("email", sessionObject.getString("email"));
+			editor.putString("name", sessionObject.getString("name"));
+			editor.putInt("balance", sessionObject.getInt("balance"));
+			editor.commit();
 			
 			return true;
 		}

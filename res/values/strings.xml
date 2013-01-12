@@ -11,7 +11,7 @@
     
     <string name = "email">Email</string>
     <string name = "login">Login</string>
-    <string name ="signup">Sign Up</string>
+    <string name ="signup">New user? Sign Up</string>
     <string name = "confirm_password">confirm password</string>
     <string name="api_base">http://tapitout.herokuapp.com/</string>
     <string name = "balance">Balance</string>
@@ -26,6 +26,7 @@
 
 	<color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
+    <color name="slate">#6D7B8D</color>
     
 
 </resources>
