@@ -22,7 +22,7 @@
 		        android:layout_height = "match_parent"        
 		        android:background="@color/white"
 		        android:textColor="@color/black"
-		        android:inputType = "none"/>
+		        android:inputType = "textCapWords"/>
    		</LinearLayout>
     	<LinearLayout
 	        android:layout_width = "fill_parent"
@@ -42,7 +42,7 @@
 		        android:layout_height = "match_parent"        
 		        android:background="@color/white"
 		        android:textColor="@color/black"
-		        android:inputType = "none"/>
+		        android:inputType = "textEmailAddress"/>
    		</LinearLayout>
     	<LinearLayout
 	        android:layout_width = "fill_parent"

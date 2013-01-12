@@ -23,7 +23,7 @@
         android:background="@color/white"
         android:textColor="@color/black"
         android:layout_marginBottom = "20dp"
-        android:inputType = "none"/>
+        android:inputType="textEmailAddress"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width = "fill_parent"

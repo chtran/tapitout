@@ -97,6 +97,7 @@ public class SignUpActivity extends Activity {
 			editor.putString("email", sessionObject.getString("email"));
 			editor.putString("name", sessionObject.getString("name"));
 			editor.putInt("balance", sessionObject.getInt("balance"));
+			editor.commit();
 			
 			return true;
 		}
