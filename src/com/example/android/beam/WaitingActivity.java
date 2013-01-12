@@ -20,6 +20,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.AnimationDrawable;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
@@ -32,6 +33,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.Parcelable;
 import android.text.format.Time;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 public class WaitingActivity extends Activity implements CreateNdefMessageCallback, OnNdefPushCompleteCallback {
@@ -47,6 +49,12 @@ public class WaitingActivity extends Activity implements CreateNdefMessageCallba
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.waiting);
+        
+        ImageView tapitImage = (ImageView) findViewById(R.id.selected);
+        tapitImage.setBackgroundResource(R.drawable.tap_animation);
+
+        AnimationDrawable tapitAnimation = (AnimationDrawable) tapitImage.getBackground();
+        tapitAnimation.start();
         
         Intent intent = getIntent();
         transactionId = intent.getIntExtra("transactionId", 0);
