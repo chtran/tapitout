@@ -3,7 +3,8 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation ="vertical"
-    android:background = "@drawable/piconeephone_03">
+    android:background = "@drawable/piconeephone_03"
+    android:id="@+id/waiting">
            
 
     <TextView
