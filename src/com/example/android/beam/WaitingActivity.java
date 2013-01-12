@@ -32,7 +32,6 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.Parcelable;
 import android.text.format.Time;
-import android.util.Pair;
 import android.widget.Toast;
 
 public class WaitingActivity extends Activity implements CreateNdefMessageCallback, OnNdefPushCompleteCallback {
@@ -116,14 +115,22 @@ public class WaitingActivity extends Activity implements CreateNdefMessageCallba
         				while(true)
         				{
         					Pair<Integer, String> transactionDetails = checkTransaction();
-        					System.out.println(transactionDetails.first);
-            				System.out.println(transactionDetails.second);
-            				if(!transactionDetails.second.equals("null") && !transactionDetails.second.equals(""))
+        					System.out.println(transactionDetails.first());
+            				System.out.println(transactionDetails.second());
+            				if(!transactionDetails.second().equals("null") && !transactionDetails.second().equals(""))
             				{
-            					new AlertDialog.Builder(getBaseContext())
+            					class RunnableWithPair implements Runnable {
+            						Pair<Integer, String> transactionDetails;
+            						
+            						public RunnableWithPair(Pair<Integer, String> dets)
+            						{
+            							transactionDetails = dets;
+            						}
+            					    public void run() {
+            					new AlertDialog.Builder(WaitingActivity.this)
             			        	.setIcon(android.R.drawable.ic_dialog_alert)
             			        	.setTitle("Send money?")
-            			        	.setMessage("Are you sure that you want to send " + nf.format(transactionDetails.first / 100.0) + " to " + transactionDetails.second + "?")
+            			        	.setMessage("Are you sure that you want to send $" + nf.format(transactionDetails.first() / 100.0) + " to " + transactionDetails.second() + "?")
             			        	.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
 
             			        		@Override
@@ -144,6 +151,9 @@ public class WaitingActivity extends Activity implements CreateNdefMessageCallba
             			        		}
             			        	})
             			        	.show();
+            					    }};
+            					    
+            					    runOnUiThread(new RunnableWithPair(transactionDetails));
             					
 //            			    	Intent intent = new Intent(getApplicationContext(), WaitingActivity.class);
 //            			    	intent.putExtra("transactionId", transactionId);
@@ -194,12 +204,12 @@ public class WaitingActivity extends Activity implements CreateNdefMessageCallba
 			public void run() {
 				Looper.prepare();
 				Pair<Integer, String> transactionDetails = confirmTransaction();
-				if(transactionDetails.first > 0)
+				if(transactionDetails.first() > 0)
 				{
 //			    	Intent intent = new Intent(getApplicationContext(), WaitingActivity.class);
 //			    	intent.putExtra("transactionId", transactionId);
 //			    	startActivity(intent);
-					Toast.makeText(getApplicationContext(), transactionDetails.second + " is sending you $" + nf.format(transactionDetails.first / 100.0) + "...", Toast.LENGTH_LONG).show();
+					Toast.makeText(getApplicationContext(), transactionDetails.second() + " is sending you $" + nf.format(transactionDetails.first() / 100.0) + "...", Toast.LENGTH_LONG).show();
 				}
 				else
 				{
