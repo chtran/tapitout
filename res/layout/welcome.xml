@@ -5,7 +5,7 @@
     android:layout_height="fill_parent"
     android:orientation = "vertical"
     android:gravity = "center"
-    android:background = "@drawable/piconeephone_03">
+    android:background = "@drawable/andoid_comic_blue_hdpi">
      <LinearLayout 
          android:layout_width="fill_parent"
          android:layout_height= "wrap_content"
