@@ -66,6 +66,12 @@ public class WaitingActivity extends Activity implements CreateNdefMessageCallba
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.waiting);
 		
+		ImageView tapitImage = (ImageView) findViewById(R.id.selected);
+		tapitImage.setBackgroundResource(R.drawable.tap_animation);
+		
+		AnimationDrawable tapitAnimation = (AnimationDrawable) tapitImage.getBackground();
+		tapitAnimation.start();
+		
 		Intent intent = getIntent();
 		transactionId = intent.getIntExtra("transactionId", 0);
 		mPreferences = getSharedPreferences("CurrentUser", MODE_PRIVATE);
@@ -203,6 +209,7 @@ public class WaitingActivity extends Activity implements CreateNdefMessageCallba
 							{
 								System.out.println("still waiting");
 							}
+							System.out.println("testing after waiting");
 							Looper.loop();
 						}
 					}
@@ -256,25 +263,40 @@ public class WaitingActivity extends Activity implements CreateNdefMessageCallba
 								if(transactionStatus != 0)
 								{
 									System.out.println(transactionStatus + " == TRANSACTION_STATUS");
+									String toastText;
 									if(transactionStatus == 1)
 									{
 										System.out.println("TESTING");
-										Toast.makeText(getApplicationContext(), "Money received!", Toast.LENGTH_LONG).show();
+										toastText = "Money received!";
 									}
 									else if(transactionStatus == 2)
 									{
-										Toast.makeText(getApplicationContext(), "Transaction cancelled!", Toast.LENGTH_LONG).show();
+										toastText = "Transaction cancelled!";
 									}
 									else if(transactionStatus == 3)
 									{
-										Toast.makeText(getApplicationContext(), "The sender does not have enough money.", Toast.LENGTH_LONG).show();
+										toastText = "The sender does not have enough money.";
 									}
 									else
 									{
-										Toast.makeText(getApplicationContext(), "Something went wrong...", Toast.LENGTH_LONG).show();
+										toastText = "Something went wrong...";
 									}
+
+									class RunnableWithString implements Runnable {
+										String toastText;
+										
+										public RunnableWithString(String text)
+										{
+											toastText = text;
+										}
+
+										public void run() {
+											Toast.makeText(getApplicationContext(), toastText, Toast.LENGTH_LONG).show();
+										}
+									};
+									runOnUiThread(new RunnableWithString(toastText));
 									
-									return;
+									finish();
 								}
 								else
 								{
