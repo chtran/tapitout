@@ -1,11 +1,13 @@
 package com.example.android.beam;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -14,6 +16,8 @@ import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.nfc.NdefMessage;
@@ -38,6 +42,7 @@ public class WaitingActivity extends Activity implements CreateNdefMessageCallba
 	private Integer transactionId;
 	Thread t;
 	private SharedPreferences mPreferences;
+	NumberFormat nf;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,6 +52,10 @@ public class WaitingActivity extends Activity implements CreateNdefMessageCallba
         Intent intent = getIntent();
         transactionId = intent.getIntExtra("transactionId", 0);
         mPreferences = getSharedPreferences("CurrentUser", MODE_PRIVATE);
+
+		nf = NumberFormat.getInstance();
+		nf.setMinimumFractionDigits(2);
+		nf.setMaximumFractionDigits(2);
         
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (mNfcAdapter == null) {
@@ -100,6 +109,58 @@ public class WaitingActivity extends Activity implements CreateNdefMessageCallba
             switch (msg.what) {
             case MESSAGE_SENT:
                 Toast.makeText(getApplicationContext(), "Sending money...", Toast.LENGTH_LONG).show();
+                
+                t = new Thread() {
+        			public void run() {
+        				Looper.prepare();
+        				while(true)
+        				{
+        					Pair<Integer, String> transactionDetails = checkTransaction();
+        					System.out.println(transactionDetails.first);
+            				System.out.println(transactionDetails.second);
+            				if(!transactionDetails.second.equals("null") && !transactionDetails.second.equals(""))
+            				{
+            					new AlertDialog.Builder(getBaseContext())
+            			        	.setIcon(android.R.drawable.ic_dialog_alert)
+            			        	.setTitle("Send money?")
+            			        	.setMessage("Are you sure that you want to send " + nf.format(transactionDetails.first / 100.0) + " to " + transactionDetails.second + "?")
+            			        	.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+
+            			        		@Override
+            			        		public void onClick(DialogInterface dialog, int which) {
+
+            			        			//Stop the activity
+//            			        			YourClass.this.finish();
+            			        		}
+
+            			        	})
+            			        	.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+
+            			        		@Override
+            			        		public void onClick(DialogInterface dialog, int which) {
+
+            			        			//Stop the activity
+//            			        			YourClass.this.finish();    
+            			        		}
+            			        	})
+            			        	.show();
+            					
+//            			    	Intent intent = new Intent(getApplicationContext(), WaitingActivity.class);
+//            			    	intent.putExtra("transactionId", transactionId);
+//            			    	startActivity(intent);
+//            					Toast.makeText(getApplicationContext(), transactionDetails.second + " is sending you $" + (transactionDetails.first / 100.0) + "...", Toast.LENGTH_LONG).show();
+            					break;
+            				}
+            				else
+            				{
+            					System.out.println("still waiting");
+            				}
+        				}
+        				Looper.loop();
+        			}
+        		};
+        		t.start();
+                
                 break;
             }
         }
@@ -138,7 +199,7 @@ public class WaitingActivity extends Activity implements CreateNdefMessageCallba
 //			    	Intent intent = new Intent(getApplicationContext(), WaitingActivity.class);
 //			    	intent.putExtra("transactionId", transactionId);
 //			    	startActivity(intent);
-					Toast.makeText(getApplicationContext(), transactionDetails.second + " is sending you $" + (transactionDetails.first / 100.0) + "...", Toast.LENGTH_LONG).show();
+					Toast.makeText(getApplicationContext(), transactionDetails.second + " is sending you $" + nf.format(transactionDetails.first / 100.0) + "...", Toast.LENGTH_LONG).show();
 				}
 				else
 				{
@@ -174,8 +235,33 @@ public class WaitingActivity extends Activity implements CreateNdefMessageCallba
 		}
 		catch(Exception e)
 		{
-//			e.printStackTrace();
+			e.printStackTrace();
 			return new Pair<Integer, String>(-1, "");
 		}
-    }	
+    }
+    
+    public Pair<Integer, String> checkTransaction()
+    {
+    	try
+		{
+			DefaultHttpClient client = new DefaultHttpClient();
+			HttpGet post = new HttpGet(getString(R.string.api_base)+"/transactions/" + transactionId + "?auth_token=" + mPreferences.getString("auth_token", ""));
+			post.setHeader("Accept", "application/json");
+			String response = null;
+			ResponseHandler<String> responseHandler = new BasicResponseHandler();
+			response = client.execute(post, responseHandler);
+
+			JSONObject jObject = new JSONObject(response);
+			JSONObject transactionObject = jObject.getJSONObject("transaction");
+			Integer transactionAmount = transactionObject.getInt("amount");
+			String transactionReceiver = transactionObject.getString("receiver_name");
+			
+			return new Pair<Integer, String>(transactionAmount, transactionReceiver);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			return new Pair<Integer, String>(-1, "");
+		}	
+    }
 }
