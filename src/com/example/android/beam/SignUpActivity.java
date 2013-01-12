@@ -15,6 +15,7 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.os.Looper;
 import android.view.View;
@@ -30,6 +31,13 @@ public class SignUpActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.signup);
         mPreferences = getSharedPreferences("CurrentUser", MODE_PRIVATE);
+        
+        NfcAdapter mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
+        if (mNfcAdapter == null) {
+        } else {
+            mNfcAdapter.setNdefPushMessageCallback(null, this);
+            mNfcAdapter.setOnNdefPushCompleteCallback(null, this);
+        }
     }
     
     public void processSignUp(View view)

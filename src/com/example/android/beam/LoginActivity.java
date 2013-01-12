@@ -15,6 +15,7 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.os.Looper;
 import android.view.View;
@@ -31,6 +32,13 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
         mPreferences = getSharedPreferences("CurrentUser", MODE_PRIVATE);
+        
+        NfcAdapter mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
+        if (mNfcAdapter == null) {
+        } else {
+            mNfcAdapter.setNdefPushMessageCallback(null, this);
+            mNfcAdapter.setOnNdefPushCompleteCallback(null, this);
+        }
     }
     
     public void launchSignUp(View view)
@@ -87,16 +95,17 @@ public class LoginActivity extends Activity {
 			JSONObject sessionObject = jObject.getJSONObject("session");
 			
 			SharedPreferences.Editor editor = mPreferences.edit();
-			editor.putString("auth_token", sessionObject.getString("auth_token"));
+			editor.putString("auth_token", sessionObject.getString("authentication_token"));
 			editor.putString("email", sessionObject.getString("email"));
 			editor.putString("name", sessionObject.getString("name"));
 			editor.putInt("balance", sessionObject.getInt("balance"));
+			editor.commit();
 			
 			return true;
 		}
 		catch(Exception e)
 		{
-//			e.printStackTrace();
+			e.printStackTrace();
 			return false;
 		}
     }
