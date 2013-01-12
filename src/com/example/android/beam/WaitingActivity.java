@@ -32,7 +32,6 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.Parcelable;
 import android.text.format.Time;
-import android.view.View;
 import android.widget.Toast;
 
 public class WaitingActivity extends Activity implements CreateNdefMessageCallback, OnNdefPushCompleteCallback {
@@ -40,7 +39,7 @@ public class WaitingActivity extends Activity implements CreateNdefMessageCallba
 	NfcAdapter mNfcAdapter;
 	private static final int MESSAGE_SENT = 1;
 	private Integer transactionId;
-	Thread t;
+	Thread t, t2;
 	private SharedPreferences mPreferences;
 	NumberFormat nf;
 	
@@ -143,6 +142,13 @@ public class WaitingActivity extends Activity implements CreateNdefMessageCallba
 													else if(transactionStatus == 1)
 													{
 														Toast.makeText(getApplicationContext(), "Money sent!", Toast.LENGTH_LONG).show();
+
+														SharedPreferences.Editor editor = mPreferences.edit();
+														editor.putInt("balance", mPreferences.getInt("balance", 0) - transactionDetails.first());
+														editor.commit();
+														
+												    	Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
+												    	startActivity(intent);
 													}
 													else
 													{
@@ -227,79 +233,90 @@ public class WaitingActivity extends Activity implements CreateNdefMessageCallba
 		NdefMessage msg = (NdefMessage) rawMsgs[0];
 		
 		transactionId = Integer.parseInt(new String(msg.getRecords()[0].getPayload()));
-		t = new Thread() {
-			public void run() {
-				Looper.prepare();
-				Pair<Integer, String> transactionDetails = confirmTransaction();
-				if(transactionDetails.first() > 0)
-				{
-					Toast.makeText(getApplicationContext(), transactionDetails.second() + " is sending you $" + nf.format(transactionDetails.first() / 100.0) + "...", Toast.LENGTH_LONG).show();
+		if(t == null || !t.isAlive())
+		{
+			t = new Thread() {
+				public void run() {
+					Looper.prepare();
+					Pair<Integer, String> transactionDetails = confirmTransaction();
+					if(transactionDetails.first() > 0)
+					{
+						Toast.makeText(getApplicationContext(), transactionDetails.second() + " is sending you $" + nf.format(transactionDetails.first() / 100.0) + "...", Toast.LENGTH_LONG).show();
+					}
+					else
+					{
+						Toast.makeText(getApplicationContext(), "Transaction failed to create.", Toast.LENGTH_LONG).show();
+					}
+					Looper.loop();
+				}
+			};
+			t.start();
+		}
 
-					// Thread t2 = new Thread() {
-					// 	public void run() {
-
-					// 		Looper.prepare();
-							while(true)
+		if(t2 == null ||!t2.isAlive())
+		{
+			t2 = new Thread() {
+				public void run() {
+					while(true)
+					{
+						Looper.prepare();
+						Pair<Integer, Integer> transactionDetails = checkTransactionStatus();
+						Integer transactionStatus = transactionDetails.first();
+						if(transactionStatus != 0)
+						{
+							System.out.println(transactionStatus + " == TRANSACTION_STATUS");
+							String toastText;
+							if(transactionStatus == 1)
 							{
-								Integer transactionStatus = checkTransactionStatus();
-								if(transactionStatus != 0)
-								{
-									System.out.println(transactionStatus + " == TRANSACTION_STATUS");
-									String toastText;
-									if(transactionStatus == 1)
-									{
-										System.out.println("TESTING");
-										toastText = "Money received!";
-									}
-									else if(transactionStatus == 2)
-									{
-										toastText = "Transaction cancelled!";
-									}
-									else if(transactionStatus == 3)
-									{
-										toastText = "The sender does not have enough money.";
-									}
-									else
-									{
-										toastText = "Something went wrong...";
-									}
-
-									class RunnableWithString implements Runnable {
-										String toastText;
-										
-										public RunnableWithString(String text)
-										{
-											toastText = text;
-										}
-
-										public void run() {
-											Toast.makeText(getApplicationContext(), toastText, Toast.LENGTH_LONG).show();
-										}
-									};
-									runOnUiThread(new RunnableWithString(toastText));
-									
-									finish();
-								}
-								else
-								{
-									System.out.println("still waiting");
-									Looper.loop();
-								}
-								//View vg = findViewById(R.id.waiting);
-								//vg.invalidate();								
+								System.out.println("TESTING");
+								toastText = "Money received!";
+								
+								SharedPreferences.Editor editor = mPreferences.edit();
+								editor.putInt("balance", mPreferences.getInt("balance", 0) - transactionDetails.second());
+								editor.commit();
 							}
-					// 	}
-					// };
-					// t2.start();
+							else if(transactionStatus == 2)
+							{
+								toastText = "Transaction cancelled!";
+							}
+							else if(transactionStatus == 3)
+							{
+								toastText = "The sender does not have enough money.";
+							}
+							else
+							{
+								toastText = "Something went wrong...";
+							}
+	
+							class RunnableWithString implements Runnable {
+								String toastText;
+								
+								public RunnableWithString(String text)
+								{
+									toastText = text;
+								}
+	
+								public void run() {
+									Toast.makeText(getApplicationContext(), toastText, Toast.LENGTH_LONG).show();
+								}
+							};
+							runOnUiThread(new RunnableWithString(toastText));
+							
+					    	Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
+					    	startActivity(intent);
+							
+							break;
+						}
+						else
+						{
+							System.out.println("still waiting");
+							Looper.loop();
+						}
+					}
 				}
-				else
-				{
-					Toast.makeText(getApplicationContext(), "Transaction failed to create.", Toast.LENGTH_LONG).show();
-				}
-				Looper.loop();
-			}
-		};
-		t.start();
+			};
+			t2.start();
+		}
 	}
 	
 	public Pair<Integer, String> confirmTransaction()
@@ -384,8 +401,8 @@ public class WaitingActivity extends Activity implements CreateNdefMessageCallba
 			return -1;
 		}
 	}
-
-	public Integer checkTransactionStatus()
+	
+	public Pair<Integer, Integer> checkTransactionStatus()
 	{
 		try
 		{
@@ -399,13 +416,14 @@ public class WaitingActivity extends Activity implements CreateNdefMessageCallba
 			JSONObject jObject = new JSONObject(response);
 			JSONObject transactionObject = jObject.getJSONObject("transaction");
 			Integer transactionStatus = transactionObject.getInt("status");
+			Integer transactionAmount = transactionObject.getInt("amount");
 			
-			return transactionStatus;
+			return new Pair<Integer, Integer>(transactionStatus, transactionAmount);
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
-			return -1;
+			return new Pair<Integer, Integer>(-1, -1);
 		}
 	}
 }
