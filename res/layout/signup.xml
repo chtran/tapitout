@@ -43,6 +43,7 @@
 	   	    <Button 
 	   	      	style="@style/buttonShortStyle"
     			android:layout_height="match_parent"
+    			android:layout_marginTop = "20dp"
     			android:layout_marginBottom = "20dp"
     			android:text="@string/signup"
     			android:onClick="processSignUp"/>
