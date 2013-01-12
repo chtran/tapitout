@@ -4,61 +4,38 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:gravity = "center" >
-  <LinearLayout
-      android:layout_width = "fill_parent"
-      android:layout_height = "wrap_content"
-      android:orientation = "horizontal">
-    <TextView
-        android:layout_width ="wrap_content"
-        android:layout_height = "match_parent"
-        android:text="@string/email"
-    	android:padding="10dp"
-   		android:textSize="18sp"
-        android:orientation="vertical"/>
+    android:gravity = "center" 
+    android:background = "@color/ltblue" >
+  
     <EditText 
+        style="@style/editTextStyle"
         android:id="@+id/email"
-        android:layout_width = "fill_parent"
-        android:layout_height = "match_parent"        
-        android:background="@color/white"
-        android:textColor="@color/black"
-        android:layout_marginRight="20dp"
+        android:hint="@string/email"
         android:layout_marginBottom = "20dp"
+        android:layout_marginLeft = "20dp"
+        android:layout_marginRight = "20dp"
         android:inputType="textEmailAddress"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width = "fill_parent"
-        android:layout_height = "wrap_content"
-        android:orientation="horizontal">
-     <TextView
-        android:layout_width ="wrap_content"
-        android:layout_height = "match_parent"
-        android:text="@string/password"
-    	android:padding="10dp"
-   		android:textSize="18sp"
-        android:orientation="vertical"/>
+
     <EditText 
+        style="@style/editTextStyle"
         android:id="@+id/password"
-        android:layout_width = "fill_parent"
-        android:layout_height = "match_parent"
-        android:background="@color/white"
-        android:textColor="@color/black"
-        android:layout_marginRight="20dp"
         android:layout_marginBottom = "20dp"
+        android:layout_marginLeft = "20dp"
+        android:layout_marginRight = "20dp"
+        android:hint="@string/password"
         android:inputType="textPassword"
         />
-    </LinearLayout>
     <LinearLayout 
         android:layout_width = "fill_parent"
         android:layout_height = "wrap_content"
         android:orientation="vertical"
-        android:gravity="center">
+        android:gravity="right">
         <Button 
             style="@style/buttonShortStyle"
     		android:layout_height="match_parent"
     		android:layout_marginBottom = "10dp"
     		android:layout_marginTop = "10dp"
-    		android:layout_marginRight = "10dp"
+    		android:layout_marginRight = "20dp"
     		android:text="@string/login"
     		android:onClick="processLogIn" />
         <Button 
@@ -66,7 +43,7 @@
     		android:layout_height="match_parent"
     		android:layout_marginBottom = "10dp"
     		android:layout_marginTop = "10dp"
-    		android:layout_marginLeft = "10dp"
+    		android:layout_marginRight = "20dp"
     		android:text="@string/signup"
     		android:onClick="launchSignUp" />
     </LinearLayout>

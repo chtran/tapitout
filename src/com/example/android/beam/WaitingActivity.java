@@ -45,22 +45,6 @@ public class WaitingActivity extends Activity implements CreateNdefMessageCallba
 	private SharedPreferences mPreferences;
 	NumberFormat nf;
 	
-<<<<<<< HEAD
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.waiting);
-        
-        ImageView tapitImage = (ImageView) findViewById(R.id.selected);
-        tapitImage.setBackgroundResource(R.drawable.tap_animation);
-
-        AnimationDrawable tapitAnimation = (AnimationDrawable) tapitImage.getBackground();
-        tapitAnimation.start();
-        
-        Intent intent = getIntent();
-        transactionId = intent.getIntExtra("transactionId", 0);
-        mPreferences = getSharedPreferences("CurrentUser", MODE_PRIVATE);
-=======
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -75,7 +59,6 @@ public class WaitingActivity extends Activity implements CreateNdefMessageCallba
 		Intent intent = getIntent();
 		transactionId = intent.getIntExtra("transactionId", 0);
 		mPreferences = getSharedPreferences("CurrentUser", MODE_PRIVATE);
->>>>>>> edc8b6057a96829172c72816a4caa8e3fb0898d9
 
 		nf = NumberFormat.getInstance();
 		nf.setMinimumFractionDigits(2);

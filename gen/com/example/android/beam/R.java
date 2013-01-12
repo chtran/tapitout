@@ -12,6 +12,7 @@ public final class R {
     }
     public static final class color {
         public static final int black=0x7f050001;
+        public static final int ltblue=0x7f050003;
         public static final int slate=0x7f050002;
         public static final int white=0x7f050000;
     }
@@ -78,5 +79,6 @@ public final class R {
     public static final class style {
         public static final int buttonLongStyle=0x7f060000;
         public static final int buttonShortStyle=0x7f060001;
+        public static final int editTextStyle=0x7f060002;
     }
 }
