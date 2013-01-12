@@ -9,13 +9,13 @@
     <TextView
         android:layout_width = "match_parent"
         android:layout_height = "wrap_content"
-        android:text="@string/balance"
+        android:text="@string/complete"
         android:textColor="@color/black"
         android:gravity = "center"
 	    android:padding="10dp"
 	    android:textSize="18sp"
 	    android:orientation="vertical"/>
-    
+  <!--   
     <TextView 
         android:layout_width = "match_parent"
         android:layout_height = "wrap_content"
@@ -25,6 +25,8 @@
 	    android:padding="10dp"
 	    android:textSize="18sp"
 	    android:orientation="vertical"/>
+	    
+	     -->
     <Button
 		style="@style/buttonShortStyle"
         android:layout_width="wrap_content"

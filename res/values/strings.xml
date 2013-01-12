@@ -5,7 +5,7 @@
     <string name="menu_settings">Android TapItOut settings</string>
     <string name="button_addcard">Add Payment Method</string>
     <string name="button_transaction">Make A Transaction</string>
-    <string name="button_quit">Quit</string>
+    <string name="button_quit">LEAVE THIS PLACE</string>
     <string name= "password">Password</string>
     <string name = "name">Name</string>
     
@@ -14,7 +14,7 @@
     <string name ="signup">Sign Up</string>
     <string name = "confirm_password">confirm password</string>
     <string name="api_base">http://tapitout.herokuapp.com/</string>
-    <string name = "balance">Balance</string>
+    <string name = "complete">Congrats U DID IT LOL </string>
     <string name = "howMuch">How much do you wish to send?</string>
     <string name = "ok">OK!</string>
     <string name = "cancel">Cancel</string>

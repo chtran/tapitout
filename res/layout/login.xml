@@ -29,13 +29,12 @@
         android:layout_width = "fill_parent"
         android:layout_height = "wrap_content"
         android:orientation="vertical"
-        android:gravity="right">
+        android:gravity="center">
         <Button 
             style="@style/buttonShortStyle"
     		android:layout_height="match_parent"
     		android:layout_marginBottom = "10dp"
     		android:layout_marginTop = "10dp"
-    		android:layout_marginRight = "20dp"
     		android:text="@string/login"
     		android:onClick="processLogIn" />
         <Button 
@@ -43,7 +42,6 @@
     		android:layout_height="match_parent"
     		android:layout_marginBottom = "10dp"
     		android:layout_marginTop = "10dp"
-    		android:layout_marginRight = "20dp"
     		android:text="@string/signup"
     		android:onClick="launchSignUp" />
     </LinearLayout>

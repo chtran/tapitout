@@ -18,7 +18,7 @@ public class MenuActivity extends Activity {
         TextView name = (TextView) findViewById(R.id.name);
         TextView balance = (TextView) findViewById(R.id.balance);
         name.setText("Hello " + mPreferences.getString("name", "Anonymous")+"!");
-        balance.setText("Balance: "+mPreferences.getInt("balance", 0));
+        balance.setText("Balance: $"+ (mPreferences.getInt("balance", 0) / 100));
         
         NfcAdapter mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (mNfcAdapter == null) {
