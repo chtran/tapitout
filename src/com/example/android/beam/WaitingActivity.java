@@ -283,11 +283,10 @@ public class WaitingActivity extends Activity implements CreateNdefMessageCallba
 								else
 								{
 									System.out.println("still waiting");
+									Looper.loop();
 								}
 								//View vg = findViewById(R.id.waiting);
-								//vg.invalidate();
-								
-								Looper.loop();
+								//vg.invalidate();								
 							}
 					// 	}
 					// };
