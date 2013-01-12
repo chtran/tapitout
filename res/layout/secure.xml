@@ -3,28 +3,33 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation = "vertical"
-    android:gravity = "center">   
+    android:gravity = "center"
+    android:background = "@color/ltblue">   
     
     <TextView
         android:layout_width = "match_parent"
         android:layout_height = "wrap_content"
         android:text="@string/balance"
+        android:textColor="@color/black"
         android:gravity = "center"
 	    android:padding="10dp"
 	    android:textSize="18sp"
 	    android:orientation="vertical"/>
+    
     <TextView 
         android:layout_width = "match_parent"
         android:layout_height = "wrap_content"
-        android:text="@string/balance"
+        android:text="@string/money"
+        android:textColor="@color/black"
         android:gravity ="center"
 	    android:padding="10dp"
 	    android:textSize="18sp"
 	    android:orientation="vertical"/>
     <Button
-         android:layout_width="wrap_content"
-    	 android:layout_height="wrap_content"
-    	 android:layout_marginBottom = "20dp"
-    	 android:text="@string/ok"/>
+		style="@style/buttonShortStyle"
+        android:layout_width="wrap_content"
+     	android:layout_height="wrap_content"
+   	 	android:layout_marginBottom = "20dp"
+   	 	android:text="@string/ok"/>
 
     </LinearLayout>
